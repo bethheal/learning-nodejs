@@ -1,4 +1,7 @@
 import {createServer} from 'node:http';
+import {unlink}from 'node:fs';
+import {writeFile}from 'node:fs';
+
 
 // define request handler
 
@@ -6,9 +9,24 @@ import {createServer} from 'node:http';
 
 // create http server
 const server = createServer((req,res) =>{
-    res.writeHead(200, {'Content-Type' :'text/html'});
-    res.end ('<h1>We have an HTTP Server</h2>');
-
+    console.log(req.url);
+    if (req.url.includes('create')){
+        //create file
+        writeFile('./fifi.html','<h1>Learning Node.js</h1>',()=>{
+        
+        //return response
+        res.writeHead(200, {'Content-Type' :'text/html'});
+        res.end ('<h1>File Created</h2>');
+    });
+    }else{
+        //Delete File
+        unlink('./hello.html',() => {
+            //return response
+            res.writeHead(200, {'Content-Type' :'text/html'});
+            res.end ('<h1>File Deleted</h2>');
+         });
+    }
+  
 });
 
 
@@ -19,8 +37,8 @@ server.listen(3000,'127.0.0.1', function() {
 
 
 //Normal Function Vs Arrow Function
-function handleRequest(){} //Normal Function
-const handleRequest = () =>{} //Arrow Function
+// function handleRequest(){} //Normal Function
+// const handleRequest = () =>{} //Arrow Function
 
 // function(){}
 
